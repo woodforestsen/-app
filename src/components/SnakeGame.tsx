@@ -3,10 +3,12 @@ import { useRef, useEffect, useState, useCallback } from 'react'
 // 游戏配置
 const COLS = 20
 const ROWS = 20
-const CELL = 20 // 每格像素
+const CELL = 20
 const CANVAS_W = COLS * CELL
 const CANVAS_H = ROWS * CELL
-const BASE_SPEED = 150 // 毫秒/帧，越小越快
+const BASE_SPEED = 150
+const TOTAL_CELLS = COLS * ROWS
+const HIGH_SCORE_KEY = 'snake_high_score'
 
 type Point = { x: number; y: number }
 type Direction = 'up' | 'down' | 'left' | 'right'
@@ -19,32 +21,67 @@ const DIR: Record<Direction, Point> = {
   right: { x: 1, y: 0 }
 }
 
+// 按键→方向映射（模块级常量，避免每次按键时重新创建）
+const KEY_MAP: Record<string, Direction> = {
+  ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right',
+  w: 'up', W: 'up', s: 'down', S: 'down', a: 'left', A: 'left', d: 'right', D: 'right'
+}
+
+const OPPOSITES: Record<Direction, Direction> = {
+  up: 'down', down: 'up', left: 'right', right: 'left'
+}
+
+// 安全的 localStorage 读写
+function loadHighScore(): number {
+  try {
+    const saved = localStorage.getItem(HIGH_SCORE_KEY)
+    return saved ? parseInt(saved, 10) : 0
+  } catch { return 0 }
+}
+
+function saveHighScore(s: number): void {
+  try { localStorage.setItem(HIGH_SCORE_KEY, String(s)) } catch { /* ignore */ }
+}
+
+// 从空闲格子列表中随机选取食物，避免死循环
 function randomFood(snake: Point[]): Point {
-  const occupied = new Set(snake.map((p) => `${p.x},${p.y}`))
-  let p: Point
-  do {
-    p = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) }
-  } while (occupied.has(`${p.x},${p.y}`))
-  return p
+  const occupied = new Set(snake.map((p) => p.y * COLS + p.x))
+  const free: number[] = []
+  for (let i = 0; i < TOTAL_CELLS; i++) {
+    if (!occupied.has(i)) free.push(i)
+  }
+  if (free.length === 0) {
+    // 蛇占满全部格子 → 玩家获胜，返回任意坐标（下一帧 tick 会撞墙结束）
+    return { x: 0, y: 0 }
+  }
+  const idx = free[Math.floor(Math.random() * free.length)]
+  return { x: idx % COLS, y: Math.floor(idx / COLS) }
 }
 
 export default function SnakeGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [gameState, setGameState] = useState<GameState>('idle')
   const [score, setScore] = useState(0)
-  const [highScore, setHighScore] = useState(() => {
-    const saved = localStorage.getItem('snake_high_score')
-    return saved ? parseInt(saved, 10) : 0
-  })
+  const [highScore, setHighScore] = useState(loadHighScore)
 
-  // 用 ref 存储可变状态，避免闭包陷阱
   const snakeRef = useRef<Point[]>([])
   const foodRef = useRef<Point>({ x: 10, y: 10 })
   const dirRef = useRef<Direction>('right')
   const nextDirRef = useRef<Direction>('right')
   const timerRef = useRef<number | null>(null)
   const scoreRef = useRef(0)
-  const speedRef = useRef(BASE_SPEED)
+  const gameStateRef = useRef<GameState>('idle')
+
+  // 同步 gameState 到 ref（供键盘监听器等读取最新值）
+  const setGameStateWrapped = (s: GameState) => {
+    gameStateRef.current = s
+    setGameState(s)
+  }
+
+  // 当前速度（由分数推导）
+  function currentSpeed(): number {
+    return Math.max(60, BASE_SPEED - Math.floor(scoreRef.current / 50) * 10)
+  }
 
   // 绘制
   const draw = useCallback(() => {
@@ -53,11 +90,9 @@ export default function SnakeGame() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // 背景
     ctx.fillStyle = '#1a1a2e'
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H)
 
-    // 网格线
     ctx.strokeStyle = '#16213e'
     ctx.lineWidth = 0.5
     for (let x = 0; x <= COLS; x++) {
@@ -73,7 +108,6 @@ export default function SnakeGame() {
       ctx.stroke()
     }
 
-    // 食物
     const f = foodRef.current
     ctx.fillStyle = '#ef4444'
     ctx.shadowColor = '#ef4444'
@@ -83,17 +117,15 @@ export default function SnakeGame() {
     ctx.fill()
     ctx.shadowBlur = 0
 
-    // 蛇
     const snake = snakeRef.current
     snake.forEach((p, i) => {
-      const ratio = 1 - i / (snake.length + 10) // 越靠近头越亮
+      const ratio = 1 - i / (snake.length + 10)
       const r = Math.floor(74 + (100 - 74) * ratio)
       const g = Math.floor(222 + (200 - 222) * ratio)
       const b = Math.floor(128 + (60 - 128) * ratio)
       ctx.fillStyle = `rgb(${r},${g},${b})`
       ctx.fillRect(p.x * CELL + 1, p.y * CELL + 1, CELL - 2, CELL - 2)
 
-      // 头部加眼睛
       if (i === 0) {
         ctx.fillStyle = '#fff'
         const d = dirRef.current
@@ -111,7 +143,19 @@ export default function SnakeGame() {
     })
   }, [])
 
-  // 游戏循环
+  // 结束游戏 — 直接从 localStorage 读取最新最高分，避免闭包陷阱
+  function endGame() {
+    if (timerRef.current) clearTimeout(timerRef.current)
+    timerRef.current = null
+    setGameStateWrapped('gameover')
+    const s = scoreRef.current
+    const currentHigh = loadHighScore() // 从 localStorage 读最新值，不用 state 闭包
+    if (s > currentHigh) {
+      saveHighScore(s)
+      setHighScore(s)
+    }
+  }
+
   const tick = useCallback(() => {
     dirRef.current = nextDirRef.current
     const snake = snakeRef.current
@@ -119,12 +163,10 @@ export default function SnakeGame() {
     const dir = dirRef.current
     const newHead: Point = { x: head.x + DIR[dir].x, y: head.y + DIR[dir].y }
 
-    // 撞墙
     if (newHead.x < 0 || newHead.x >= COLS || newHead.y < 0 || newHead.y >= ROWS) {
       endGame()
       return
     }
-    // 撞自己
     if (snake.some((p) => p.x === newHead.x && p.y === newHead.y)) {
       endGame()
       return
@@ -139,95 +181,54 @@ export default function SnakeGame() {
       scoreRef.current = s
       setScore(s)
       foodRef.current = randomFood(newSnake)
-      // 加速
-      speedRef.current = Math.max(60, BASE_SPEED - Math.floor(s / 50) * 10)
     }
 
     snakeRef.current = newSnake
     draw()
-    scheduleNext()
+
+    if (timerRef.current) clearTimeout(timerRef.current)
+    timerRef.current = window.setTimeout(tick, currentSpeed())
   }, [draw])
 
-  function scheduleNext() {
-    if (timerRef.current) clearTimeout(timerRef.current)
-    timerRef.current = window.setTimeout(tick, speedRef.current)
-  }
-
-  function endGame() {
-    if (timerRef.current) clearTimeout(timerRef.current)
-    timerRef.current = null
-    setGameState('gameover')
-    const s = scoreRef.current
-    if (s > highScore) {
-      setHighScore(s)
-      localStorage.setItem('snake_high_score', String(s))
-    }
-  }
-
-  // 开始游戏
   function startGame() {
     const initialSnake: Point[] = [
-      { x: 10, y: 10 },
-      { x: 9, y: 10 },
-      { x: 8, y: 10 }
+      { x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }
     ]
     snakeRef.current = initialSnake
     dirRef.current = 'right'
     nextDirRef.current = 'right'
     scoreRef.current = 0
-    speedRef.current = BASE_SPEED
     foodRef.current = randomFood(initialSnake)
     setScore(0)
-    setGameState('playing')
+    setGameStateWrapped('playing')
     draw()
 
     if (timerRef.current) clearTimeout(timerRef.current)
-    timerRef.current = window.setTimeout(tick, speedRef.current)
+    timerRef.current = window.setTimeout(tick, BASE_SPEED)
   }
 
-  // 暂停/继续
   function togglePause() {
-    if (gameState === 'playing') {
+    if (gameStateRef.current === 'playing') {
       if (timerRef.current) clearTimeout(timerRef.current)
       timerRef.current = null
-      setGameState('paused')
-    } else if (gameState === 'paused') {
-      setGameState('playing')
-      timerRef.current = window.setTimeout(tick, speedRef.current)
+      setGameStateWrapped('paused')
+    } else if (gameStateRef.current === 'paused') {
+      setGameStateWrapped('playing')
+      timerRef.current = window.setTimeout(tick, currentSpeed())
     }
   }
 
-  // 键盘监听
+  // 键盘监听（仅在游戏进行中处理方向键）
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      const keyMap: Record<string, Direction> = {
-        ArrowUp: 'up',
-        ArrowDown: 'down',
-        ArrowLeft: 'left',
-        ArrowRight: 'right',
-        w: 'up',
-        W: 'up',
-        s: 'down',
-        S: 'down',
-        a: 'left',
-        A: 'left',
-        d: 'right',
-        D: 'right'
-      }
-      const newDir = keyMap[e.key]
+      const gs = gameStateRef.current
+      if (gs !== 'playing' && gs !== 'paused') return // 非游戏状态忽略
+
+      const newDir = KEY_MAP[e.key]
       if (!newDir) return
 
       e.preventDefault()
-
-      // 不允许反向
-      const current = dirRef.current
-      const opposites: Record<Direction, Direction> = {
-        up: 'down',
-        down: 'up',
-        left: 'right',
-        right: 'left'
-      }
-      if (newDir !== opposites[current]) {
+      if (newDir !== OPPOSITES[dirRef.current]) {
         nextDirRef.current = newDir
       }
     }
@@ -236,17 +237,31 @@ export default function SnakeGame() {
     return () => window.removeEventListener('keydown', handleKey)
   }, [])
 
-  // 清理
+  // 组件卸载时清理计时器
   useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
     }
   }, [])
 
-  // 游戏结束后重绘（展示最终状态）
+  // 游戏结束后重绘
   useEffect(() => {
     if (gameState === 'gameover') draw()
   }, [gameState, draw])
+
+  // 方向键回调（避免 JSX 中每次渲染重建内联函数）
+  const pressUp = useCallback(() => {
+    if (dirRef.current !== 'down') nextDirRef.current = 'up'
+  }, [])
+  const pressDown = useCallback(() => {
+    if (dirRef.current !== 'up') nextDirRef.current = 'down'
+  }, [])
+  const pressLeft = useCallback(() => {
+    if (dirRef.current !== 'right') nextDirRef.current = 'left'
+  }, [])
+  const pressRight = useCallback(() => {
+    if (dirRef.current !== 'left') nextDirRef.current = 'right'
+  }, [])
 
   return (
     <div className="snake-game">
@@ -271,7 +286,6 @@ export default function SnakeGame() {
           className="snake-canvas"
         />
 
-        {/* 覆盖层 */}
         {gameState === 'idle' && (
           <div className="snake-overlay">
             <p className="snake-overlay-title">🐍 贪吃蛇</p>
@@ -303,7 +317,7 @@ export default function SnakeGame() {
         {gameState === 'playing' && (
           <button className="snake-btn pause" onClick={togglePause}>暂停</button>
         )}
-        {gameState !== 'idle' && gameState !== 'playing' && (
+        {(gameState === 'paused' || gameState === 'gameover') && (
           <button className="snake-btn restart" onClick={startGame}>
             {gameState === 'gameover' ? '重新开始' : '开始'}
           </button>
@@ -313,29 +327,17 @@ export default function SnakeGame() {
       {/* 移动端虚拟方向键 */}
       <div className="snake-dpad">
         <div className="dpad-row">
-          <button className="dpad-btn" onMouseDown={() => {}} onClick={() => {
-            const current = dirRef.current
-            if (current !== 'down') nextDirRef.current = 'up'
-          }}>▲</button>
+          <button className="dpad-btn" onClick={pressUp}>▲</button>
         </div>
         <div className="dpad-row">
-          <button className="dpad-btn" onClick={() => {
-            const current = dirRef.current
-            if (current !== 'right') nextDirRef.current = 'left'
-          }}>◀</button>
+          <button className="dpad-btn" onClick={pressLeft}>◀</button>
           <button className="dpad-btn" onClick={togglePause}>
             {gameState === 'playing' ? '⏸' : '▶'}
           </button>
-          <button className="dpad-btn" onClick={() => {
-            const current = dirRef.current
-            if (current !== 'left') nextDirRef.current = 'right'
-          }}>▶</button>
+          <button className="dpad-btn" onClick={pressRight}>▶</button>
         </div>
         <div className="dpad-row">
-          <button className="dpad-btn" onClick={() => {
-            const current = dirRef.current
-            if (current !== 'up') nextDirRef.current = 'down'
-          }}>▼</button>
+          <button className="dpad-btn" onClick={pressDown}>▼</button>
         </div>
       </div>
     </div>
