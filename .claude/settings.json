@@ -83,14 +83,55 @@
       "Edit(/.claude/agents/tester.md)",
       "Edit(/.claude/agents/quality-engineer.md)",
       "Edit(/.claude/agents/gitcommit-agent.md)",
-      "Bash(git commit -m '添加 Git 提交门禁系统 — quality-engineer/tester 输出标记文件 + gitcommit-agent + gitcommit skill *)"
+      "Bash(git commit -m '添加 Git 提交门禁系统 — quality-engineer/tester 输出标记文件 + gitcommit-agent + gitcommit skill *)",
+      "WebFetch(domain:www.morphllm.com)",
+      "Bash(mkdir -p \"d:/Program Files/项目/记账桌面app/.claude/hooks\")",
+      "Bash(bash \"d:/Program Files/项目/记账桌面app/.claude/hooks/keyword-trigger.sh\")",
+      "Edit(/.claude/hooks/**)",
+      "Bash(python3 -c \"import json,sys; d=json.load(sys.stdin); print(d.get('prompt',''))\")",
+      "Bash(python3 -c \"import json; json.load\\(open\\('d:/Program Files/项目/记账桌面app/.claude/settings.json'\\)\\); print\\('JSON 格式正确'\\)\")",
+      "Bash(python3 -c \"import json; json.loads\\(open\\(r'd:\\\\Program Files\\\\项目\\\\记账桌面app\\\\.claude\\\\settings.json', encoding='utf-8'\\).read\\(\\)\\); print\\('JSON OK'\\)\")",
+      "Bash(rm -f \"D:\\\\Program Files\\\\项目\\\\记账桌面app\\\\.claude\\\\artifacts\\\\test-result.json\" \"D:\\\\Program Files\\\\项目\\\\记账桌面app\\\\.claude\\\\artifacts\\\\quality-result.json\")",
+      "Bash(mkdir -p \"d:\\\\Program Files\\\\项目\\\\记账桌面app\\\\.claude\\\\artifacts\")",
+      "Bash(grep -rniE \"\\(innerHTML|dangerouslySetInnerHTML|eval\\\\\\(|document\\\\.write\\)\" src/ --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rniE \"\\(password|secret|api[_-]?key|token|access[_-]?key|private[_-]?key|credential\\)\" src/ --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rniE \"localStorage\\\\.\\(getItem|setItem\\)\" src/ --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rni \"JSON.parse\" src/ --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rni \"as any\" src/ --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rni \"localStorage\" src/components/ --include=\"*.tsx\")",
+      "Bash(grep -rniE \"\\(setTimeout|setInterval\\)\\\\s*\\\\\\(\\\\s*['\\\\\"\\\\`]\" src/ --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rni \"console.log\" src/ --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rniA0 \"catch\" src/ --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rni -A2 \"catch\\\\s*{\" src/ --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rniE \"\\\\b\\(0\\\\.01|0\\\\.0\\)\\\\b\" src/App.tsx src/storage.ts src/types.ts src/components/*.tsx src/main.tsx)",
+      "Bash(grep -rni \"onClick=\" src/components/*.tsx src/App.tsx)",
+      "Bash(grep -rnic \"export \" src/*.ts src/components/*.tsx src/App.tsx)",
+      "Bash(grep -rni \"import React\" src/ --include=\"*.tsx\")",
+      "Bash(ls src/styles/)",
+      "Bash(python3 -c \"import json; json.load\\(open\\('.claude/settings.json', encoding='utf-8'\\)\\); print\\('JSON 格式正确'\\)\")",
+      "Bash(bash -n \".claude/hooks/keyword-trigger.sh\")",
+      "Bash(cd \"d:/Program Files/项目/记账桌面app\" && mkdir -p .claude/artifacts)",
+      "Bash(echo '{\"passed\":true,\"score\":63,\"criticalCount\":0,\"highCount\":2,\"timestamp\":\"2026-07-07T19:30:00.000Z\"}' > \"d:/Program Files/项目/记账桌面app/.claude/artifacts/quality-result.json\" && cat \"d:/Program Files/项目/记账桌面app/.claude/artifacts/quality-result.json\")"
     ],
     "additionalDirectories": [
       "d:\\heimajizhang",
       "d:\\heimajizhang\\src-tauri",
       "d:\\Program Files\\项目\\记账桌面app\\.claude",
       "d:\\Program Files\\项目\\记账桌面app\\.claude\\skills",
-      "d:\\Program Files\\项目\\记账桌面app\\.claude\\artifacts"
+      "d:\\Program Files\\项目\\记账桌面app\\.claude\\artifacts",
+      "D:\\Program Files\\项目\\记账桌面app\\.claude\\artifacts"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"d:/Program Files/项目/记账桌面app/.claude/hooks/keyword-trigger.sh\""
+          }
+        ]
+      }
     ]
   }
 }
