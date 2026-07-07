@@ -6,14 +6,17 @@ import {
   addCustomSubCategory,
   addCustomMainCategory,
   updateCustomCategory,
-  deleteCustomCategory
+  deleteCustomCategory,
+  countExpenses
 } from '../storage'
 
 interface Props {
   onCategoriesChanged: () => void
+  refreshTrigger?: number
 }
 
-export default function CategoryManager({ onCategoriesChanged }: Props) {
+export default function CategoryManager({ onCategoriesChanged, refreshTrigger }: Props) {
+  // refreshTrigger 变化时 React 会重新渲染，getMergedCategories 自动读取最新数据
   const [refresh, setRefresh] = useState(0)
   const [activeType, setActiveType] = useState<ExpenseType>('expense')
   const merged = getMergedCategories(activeType)
@@ -135,17 +138,7 @@ export default function CategoryManager({ onCategoriesChanged }: Props) {
   }
 
   function countRecordsInCategory(mainCategory: string, subCategory: string | null): number {
-    try {
-      const raw = localStorage.getItem('heimajizhang_expenses')
-      if (!raw) return 0
-      const all = JSON.parse(raw)
-      return all.filter((e: { type: string; category: string; subCategory: string }) => {
-        if (e.type !== activeType) return false
-        if (e.category !== mainCategory) return false
-        if (subCategory && e.subCategory !== subCategory) return false
-        return true
-      }).length
-    } catch { return 0 }
+    return countExpenses({ type: activeType, category: mainCategory, subCategory })
   }
 
   const mainCategories = Object.keys(merged)

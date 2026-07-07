@@ -898,6 +898,18 @@ h2 {
   background: #16a34a;
 }
 
+/* 表单字段错误提示 */
+.field-error {
+  display: block;
+  color: var(--danger);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.amount-input.has-error {
+  border-color: var(--danger);
+}
+
 /* 收入金额绿色 */
 .expense-amount.income {
   color: #22c55e;

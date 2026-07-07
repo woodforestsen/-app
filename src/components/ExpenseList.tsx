@@ -1,18 +1,28 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import type { Expense, ExpenseType } from '../types'
 import { getExpenses, deleteExpense, getMergedMainCategories, getMergedSubCategories } from '../storage'
 
-export default function ExpenseList() {
+interface Props {
+  refreshTrigger?: number
+}
+
+/** 格式化日期为 "M月D日 周X" 的中文显示 */
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr)
+  const month = d.getMonth() + 1
+  const day = d.getDate()
+  const weekDays = ['日', '一', '二', '三', '四', '五', '六']
+  const weekDay = weekDays[d.getDay()]
+  return `${month}月${day}日 周${weekDay}`
+}
+
+export default function ExpenseList({ refreshTrigger }: Props) {
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [filterType, setFilterType] = useState<ExpenseType | ''>('')
   const [filterCategory, setFilterCategory] = useState('')
   const [filterSubCategory, setFilterSubCategory] = useState('')
 
-  useEffect(() => {
-    loadExpenses()
-  }, [filterType, filterCategory, filterSubCategory])
-
-  function loadExpenses() {
+  const loadExpenses = useCallback(() => {
     const filter: Record<string, string> = {}
     if (filterType) filter.type = filterType
     if (filterCategory) filter.category = filterCategory
@@ -22,7 +32,11 @@ export default function ExpenseList() {
       Object.keys(filter).length > 0 ? filter : undefined
     )
     setExpenses(data)
-  }
+  }, [filterType, filterCategory, filterSubCategory])
+
+  useEffect(() => {
+    loadExpenses()
+  }, [loadExpenses, refreshTrigger])
 
   function handleDelete(id: number) {
     if (!confirm('确定要删除这条记录吗？')) return
@@ -36,15 +50,6 @@ export default function ExpenseList() {
   const subCategories = filterCategory
     ? getMergedSubCategories(effectiveType, filterCategory)
     : []
-
-  function formatDate(dateStr: string): string {
-    const d = new Date(dateStr)
-    const month = d.getMonth() + 1
-    const day = d.getDate()
-    const weekDays = ['日', '一', '二', '三', '四', '五', '六']
-    const weekDay = weekDays[d.getDay()]
-    return `${month}月${day}日 周${weekDay}`
-  }
 
   return (
     <div className="expense-list">

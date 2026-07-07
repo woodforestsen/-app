@@ -1,8 +1,30 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { getMonthlyStats, getRecordedMonths } from '../storage'
 import type { MonthlyStats as MonthlyStatsType } from '../types'
 
-export default function MonthlyStats() {
+// 支出分类柱状图颜色
+const EXPENSE_BAR_COLORS = [
+  '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e',
+  '#14b8a6', '#06b6d4', '#3b82f6', '#8b5cf6', '#a855f7'
+]
+
+// 收入分类柱状图颜色
+const INCOME_BAR_COLORS = [
+  '#22c55e', '#16a34a', '#15803d', '#65a30d', '#4d7c0f',
+  '#059669', '#047857', '#0d9488', '#0f766e', '#115e59'
+]
+
+interface Props {
+  refreshTrigger?: number
+}
+
+/** 格式化年月为 "YYYY年M月" 的中文显示 */
+function formatMonthLabel(ym: string): string {
+  const [y, m] = ym.split('-')
+  return `${y}年${parseInt(m)}月`
+}
+
+export default function MonthlyStats({ refreshTrigger }: Props) {
   const today = new Date()
   const currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`
 
@@ -10,28 +32,17 @@ export default function MonthlyStats() {
   const [stats, setStats] = useState<MonthlyStatsType | null>(null)
   const [months, setMonths] = useState<string[]>([])
 
+  const loadStats = useCallback(() => {
+    setStats(getMonthlyStats(selectedMonth))
+  }, [selectedMonth])
+
   useEffect(() => {
     setMonths(getRecordedMonths())
   }, [])
 
   useEffect(() => {
-    setStats(getMonthlyStats(selectedMonth))
-  }, [selectedMonth])
-
-  const barColors = [
-    '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e',
-    '#14b8a6', '#06b6d4', '#3b82f6', '#8b5cf6', '#a855f7'
-  ]
-
-  const incomeColors = [
-    '#22c55e', '#16a34a', '#15803d', '#65a30d', '#4d7c0f',
-    '#059669', '#047857', '#0d9488', '#0f766e', '#115e59'
-  ]
-
-  function formatMonthLabel(ym: string): string {
-    const [y, m] = ym.split('-')
-    return `${y}年${parseInt(m)}月`
-  }
+    loadStats()
+  }, [loadStats, refreshTrigger])
 
   function changeMonth(delta: number) {
     const [y, m] = selectedMonth.split('-').map(Number)
@@ -91,7 +102,7 @@ export default function MonthlyStats() {
                       className="chart-bar expense-bar"
                       style={{
                         width: `${Math.max(item.percent, 3)}%`,
-                        backgroundColor: barColors[idx % barColors.length]
+                        backgroundColor: EXPENSE_BAR_COLORS[idx % EXPENSE_BAR_COLORS.length]
                       }}
                     />
                   </div>
@@ -114,7 +125,7 @@ export default function MonthlyStats() {
                       className="chart-bar income-bar"
                       style={{
                         width: `${Math.max(item.percent, 3)}%`,
-                        backgroundColor: incomeColors[idx % incomeColors.length]
+                        backgroundColor: INCOME_BAR_COLORS[idx % INCOME_BAR_COLORS.length]
                       }}
                     />
                   </div>

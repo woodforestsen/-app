@@ -51,11 +51,33 @@
       "Bash(git commit -m '修复贪吃蛇代码审查发现的 8 个问题 *)",
       "Bash(git merge *)",
       "Bash(git stash *)",
-      "Bash(git commit -m '修复贪吃蛇两个遗漏bug *)"
+      "Bash(git commit -m '修复贪吃蛇两个遗漏bug *)",
+      "Bash(mkdir -p \"d:\\\\Program Files\\\\项目\\\\记账桌面app\\\\.claude\\\\skills\")",
+      "WebFetch(domain:skywork.ai)",
+      "WebFetch(domain:dev.classmethod.jp)",
+      "Bash(mkdir -p \"d:/Program Files/项目/记账桌面app/.claude/skills/unit-test\")",
+      "Edit(/.claude/skills/unit-test/**)",
+      "Read(//c/Users/Lenovo/.claude/skills/**)",
+      "WebFetch(domain:apidog.com)",
+      "WebFetch(domain:www.tembo.io)",
+      "Bash(mkdir -p \"d:/Program Files/项目/记账桌面app/.claude/agents\")",
+      "Skill(unit-test)",
+      "Skill(unit-test:*)",
+      "Bash(npx vitest *)",
+      "Edit(/.claude/skills/comments-check/**)",
+      "Skill(comments-check)",
+      "Skill(comments-check:*)",
+      "Edit(/.claude/skills/security-audit/**)",
+      "Skill(security-audit)",
+      "Skill(security-audit:*)",
+      "Bash(npm audit *)",
+      "Bash(echo \"EXIT: $?\")"
     ],
     "additionalDirectories": [
       "d:\\heimajizhang",
-      "d:\\heimajizhang\\src-tauri"
+      "d:\\heimajizhang\\src-tauri",
+      "d:\\Program Files\\项目\\记账桌面app\\.claude",
+      "d:\\Program Files\\项目\\记账桌面app\\.claude\\skills"
     ]
   }
 }

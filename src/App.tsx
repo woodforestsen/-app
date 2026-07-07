@@ -50,10 +50,10 @@ export default function App() {
 
       <main className="app-main">
         {activeTab === 'add' && <AddExpense onSuccess={handleExpenseAdded} />}
-        {activeTab === 'list' && <ExpenseList key={refreshKey} />}
-        {activeTab === 'stats' && <MonthlyStats key={refreshKey} />}
+        {activeTab === 'list' && <ExpenseList refreshTrigger={refreshKey} />}
+        {activeTab === 'stats' && <MonthlyStats refreshTrigger={refreshKey} />}
         {activeTab === 'categories' && (
-          <CategoryManager key={refreshKey} onCategoriesChanged={handleCategoriesChanged} />
+          <CategoryManager refreshTrigger={refreshKey} onCategoriesChanged={handleCategoriesChanged} />
         )}
         {activeTab === 'snake' && <SnakeGame />}
       </main>

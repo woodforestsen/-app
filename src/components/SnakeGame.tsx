@@ -144,7 +144,7 @@ export default function SnakeGame() {
   }, [])
 
   // 结束游戏 — 直接从 localStorage 读取最新最高分，避免闭包陷阱
-  function endGame() {
+  const endGame = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
     timerRef.current = null
     setGameStateWrapped('gameover')
@@ -154,7 +154,7 @@ export default function SnakeGame() {
       saveHighScore(s)
       setHighScore(s)
     }
-  }
+  }, [])
 
   const tick = useCallback(() => {
     dirRef.current = nextDirRef.current
@@ -194,7 +194,7 @@ export default function SnakeGame() {
 
     if (timerRef.current) clearTimeout(timerRef.current)
     timerRef.current = window.setTimeout(tick, currentSpeed())
-  }, [draw])
+  }, [draw, endGame])
 
   function startGame() {
     const initialSnake: Point[] = [

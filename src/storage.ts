@@ -2,6 +2,7 @@ import type { Expense, ExpenseType } from './types'
 import { getPresetCategories, CUSTOM_CATEGORIES_KEY } from './types'
 
 const STORAGE_KEY = 'heimajizhang_expenses'
+const ID_COUNTER_KEY = 'heimajizhang_id_counter'
 const CUSTOM_CAT_KEY = CUSTOM_CATEGORIES_KEY
 
 // 自定义分类存储格式：{ expense: {...}, income: {...} }
@@ -25,11 +26,19 @@ function saveAll(expenses: Expense[]): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses))
 }
 
-// 生成自增 ID
+// 生成自增 ID（使用独立计数器，避免每次全量读取）
 function getNextId(): number {
-  const all = readAll()
-  if (all.length === 0) return 1
-  return Math.max(...all.map((e) => e.id)) + 1
+  try {
+    const raw = localStorage.getItem(ID_COUNTER_KEY)
+    const nextId = raw ? parseInt(raw, 10) + 1 : 1
+    localStorage.setItem(ID_COUNTER_KEY, String(nextId))
+    return nextId
+  } catch {
+    // fallback：如果计数器失败，回退到全量扫描
+    const all = readAll()
+    if (all.length === 0) return 1
+    return Math.max(...all.map((e) => e.id)) + 1
+  }
 }
 
 // ===== 记录 CRUD =====
@@ -142,6 +151,21 @@ export function getRecordedMonths(): string[] {
     months.add(e.date.slice(0, 7))
   }
   return Array.from(months).sort().reverse()
+}
+
+// 统计符合条件的记录数量
+export function countExpenses(filter: {
+  type: ExpenseType
+  category: string
+  subCategory?: string | null
+}): number {
+  const { type, category, subCategory } = filter
+  return readAll().filter((e) => {
+    if (e.type !== type) return false
+    if (e.category !== category) return false
+    if (subCategory != null && e.subCategory !== subCategory) return false
+    return true
+  }).length
 }
 
 // ===== 自定义分类管理 =====

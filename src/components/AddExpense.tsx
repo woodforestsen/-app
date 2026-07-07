@@ -16,7 +16,7 @@ export default function AddExpensePanel({ onSuccess }: Props) {
   const [category, setCategory] = useState(getMergedMainCategories('expense')[0])
   const [subCategory, setSubCategory] = useState(getMergedSubCategories('expense', getMergedMainCategories('expense')[0])[0])
   const [note, setNote] = useState('')
-  const [saving, setSaving] = useState(false)
+  const [amountError, setAmountError] = useState('')
 
   const handleTypeChange = (newType: ExpenseType) => {
     setRecordType(newType)
@@ -34,26 +34,23 @@ export default function AddExpensePanel({ onSuccess }: Props) {
   const handleSubmit = () => {
     const numAmount = parseFloat(amount)
     if (isNaN(numAmount) || numAmount <= 0) {
-      alert('请输入正确的金额')
+      setAmountError('请输入正确的金额')
       return
     }
+    setAmountError('')
 
-    setSaving(true)
-    setTimeout(() => {
-      addExpense({
-        type: recordType,
-        amount: Math.round(numAmount * 100) / 100,
-        date,
-        category,
-        subCategory,
-        note: note.trim()
-      })
-      setAmount('')
-      setNote('')
-      setDate(today)
-      setSaving(false)
-      onSuccess()
-    }, 150)
+    addExpense({
+      type: recordType,
+      amount: Math.round(numAmount * 100) / 100,
+      date,
+      category,
+      subCategory,
+      note: note.trim()
+    })
+    setAmount('')
+    setNote('')
+    setDate(today)
+    onSuccess()
   }
 
   return (
@@ -79,19 +76,18 @@ export default function AddExpensePanel({ onSuccess }: Props) {
       <div className="form-group">
         <label>金额（元）</label>
         <div className="amount-input-wrapper">
-          <span className={`currency-symbol ${recordType}`}>
-            {recordType === 'expense' ? '¥' : '¥'}
-          </span>
+          <span className={`currency-symbol ${recordType}`}>¥</span>
           <input
             type="number"
-            className="amount-input"
+            className={`amount-input ${amountError ? 'has-error' : ''}`}
             placeholder="0.00"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => { setAmount(e.target.value); setAmountError('') }}
             step="0.01"
             min="0"
             autoFocus
           />
+          {amountError && <span className="field-error">{amountError}</span>}
         </div>
       </div>
 
@@ -131,9 +127,9 @@ export default function AddExpensePanel({ onSuccess }: Props) {
       <button
         className={`submit-btn ${recordType}`}
         onClick={handleSubmit}
-        disabled={saving || !amount}
+        disabled={!amount}
       >
-        {saving ? '保存中...' : recordType === 'expense' ? '✓ 记录支出' : '✓ 记录收入'}
+        {recordType === 'expense' ? '✓ 记录支出' : '✓ 记录收入'}
       </button>
     </div>
   )

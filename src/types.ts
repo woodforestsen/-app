@@ -53,9 +53,12 @@ export function isPresetCategory(type: ExpenseType, mainCategory: string, subCat
   return preset[mainCategory].includes(subCategory)
 }
 
-// 向后兼容
+// ===== 向后兼容（已废弃） =====
+/** @deprecated 请使用 EXPENSE_PRESET_CATEGORIES 或 getPresetCategories('expense') */
 export const CATEGORIES = EXPENSE_PRESET_CATEGORIES
+/** @deprecated 请使用 getMergedMainCategories('expense') */
 export const MAIN_CATEGORIES = Object.keys(EXPENSE_PRESET_CATEGORIES)
+/** @deprecated 请使用 getMergedSubCategories('expense', mainCategory) */
 export function getSubCategories(mainCategory: string): string[] {
   return EXPENSE_PRESET_CATEGORIES[mainCategory] || []
 }
