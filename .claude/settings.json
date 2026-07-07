@@ -82,7 +82,8 @@
       "Skill(gitcommit:*)",
       "Edit(/.claude/agents/tester.md)",
       "Edit(/.claude/agents/quality-engineer.md)",
-      "Edit(/.claude/agents/gitcommit-agent.md)"
+      "Edit(/.claude/agents/gitcommit-agent.md)",
+      "Bash(git commit -m '添加 Git 提交门禁系统 — quality-engineer/tester 输出标记文件 + gitcommit-agent + gitcommit skill *)"
     ],
     "additionalDirectories": [
       "d:\\heimajizhang",
