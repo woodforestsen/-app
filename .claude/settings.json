@@ -71,13 +71,25 @@
       "Skill(security-audit)",
       "Skill(security-audit:*)",
       "Bash(npm audit *)",
-      "Bash(echo \"EXIT: $?\")"
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(mkdir -p \"d:/Program Files/项目/记账桌面app/.claude/artifacts\")",
+      "Bash(mkdir -p \"d:/Program Files/项目/记账桌面app/.claude/skills/gitcommit\")",
+      "Edit(/.claude/skills/gitcommit/**)",
+      "Read(/.claude/artifacts/**)",
+      "Write(/.claude/artifacts/**)",
+      "Bash(rm -f .claude/artifacts/*.json)",
+      "Skill(gitcommit)",
+      "Skill(gitcommit:*)",
+      "Edit(/.claude/agents/tester.md)",
+      "Edit(/.claude/agents/quality-engineer.md)",
+      "Edit(/.claude/agents/gitcommit-agent.md)"
     ],
     "additionalDirectories": [
       "d:\\heimajizhang",
       "d:\\heimajizhang\\src-tauri",
       "d:\\Program Files\\项目\\记账桌面app\\.claude",
-      "d:\\Program Files\\项目\\记账桌面app\\.claude\\skills"
+      "d:\\Program Files\\项目\\记账桌面app\\.claude\\skills",
+      "d:\\Program Files\\项目\\记账桌面app\\.claude\\artifacts"
     ]
   }
 }

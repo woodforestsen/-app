@@ -3,3 +3,6 @@ dist/
 release/
 .DS_Store
 *.log
+
+# 门禁标记文件（临时文件，不提交）
+.claude/artifacts/*.json

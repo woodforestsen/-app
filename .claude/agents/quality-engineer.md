@@ -233,6 +233,39 @@ npx tsc --noEmit 2>&1
 - `CategoryManager.tsx` L139 绕过 storage 抽象层直接读 localStorage（已在之前的安全审计中报告）
 - `storage.ts` 332 行，偏长（后续可拆分，当前暂不处理）
 
+---
+
+## 第四步：输出标记文件（供门禁系统使用）
+
+审查完毕后，无论结果如何，**必须额外执行以下操作**：
+
+1. 确保 `.claude/artifacts/` 目录存在（不存在则用 `mkdir -p .claude/artifacts` 创建）
+2. 用 Write 工具写入 `.claude/artifacts/quality-result.json`，格式如下：
+
+```json
+{
+  "passed": true,
+  "score": 72,
+  "criticalCount": 0,
+  "highCount": 2,
+  "timestamp": "2026-07-07T19:30:00.000Z"
+}
+```
+
+**通过标准（全部满足才 `passed = true`）**：
+- 综合得分 ≥ 50 分
+- 严重问题（🔴 critical）数量为 0
+
+- `score`: 综合得分（0-100）
+- `criticalCount`: 严重问题数量
+- `highCount`: 高危问题数量
+- `timestamp`: 当前 ISO 时间字符串
+
+> ⚠️ **重要**：无论你是被用户直接调用还是被 gitcommit-agent 调用，
+> 每次审查完毕后都要写入这个标记文件。这是你的标准行为。
+
+---
+
 ### 正确但看起来可疑的模式
 | 模式 | 为什么没问题 |
 |------|-------------|

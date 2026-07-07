@@ -48,3 +48,29 @@ skills:
 - 每个 `it()` 只测一个行为
 - 覆盖正常情况 + 边界情况（空数据、0、负数等）
 - 沟通语言：中文，通俗易懂
+
+
+### 收到"运行全部测试"需求时（供门禁系统调用）
+
+当被 gitcommit-agent 或其他自动化流程调用时，在完成测试执行和中文报告后，
+**必须额外执行以下操作**：
+
+1. 确保 `.claude/artifacts/` 目录存在（不存在则用 `mkdir -p .claude/artifacts` 创建）
+2. 用 Write 工具写入 `.claude/artifacts/test-result.json`，格式如下：
+
+```json
+{
+  "passed": true,
+  "totalTests": 67,
+  "failedTests": 0,
+  "timestamp": "2026-07-07T19:30:00.000Z"
+}
+```
+
+- `passed`: 所有测试通过为 `true`，任一失败为 `false`
+- `totalTests`: 测试总数
+- `failedTests`: 失败测试数
+- `timestamp`: 当前 ISO 时间字符串
+
+> ⚠️ **重要**：无论你是被用户直接调用还是被 gitcommit-agent 调用，
+> 每次执行完毕后都要写入这个标记文件。这是你的标准行为。
