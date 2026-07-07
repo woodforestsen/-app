@@ -1,0 +1,16 @@
+[package]
+name = "heimajizhang"
+version = "1.0.0"
+description = "黑马记账 - 个人记账应用"
+authors = ["黑马记账"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]

@@ -1,0 +1,1007 @@
+/* ===== 全局样式 ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #f97316;
+  --primary-dark: #ea580c;
+  --bg: #f8f9fa;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --danger: #ef4444;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== App 布局 ===== */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.app-header {
+  text-align: center;
+  padding: 16px 20px 8px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 1px;
+}
+
+/* ===== 底部 Tab 导航 ===== */
+.tab-bar {
+  display: flex;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border: none;
+  background: none;
+  font-size: 15px;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  color: var(--text-secondary);
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 600;
+}
+
+.tab-icon {
+  font-size: 16px;
+}
+
+/* ===== 主内容区 ===== */
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px;
+}
+
+/* ===== 通用标题 ===== */
+h2 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+/* ===== 表单 ===== */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 金额输入 */
+.amount-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: border-color 0.2s;
+}
+
+.amount-input-wrapper:focus-within {
+  border-color: var(--primary);
+}
+
+.currency-symbol {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  padding: 0 12px;
+}
+
+.amount-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 22px;
+  padding: 12px 12px 12px 0;
+  font-weight: 600;
+  background: transparent;
+  color: var(--text);
+}
+
+.amount-input::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* 日期输入 */
+.date-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 15px;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.date-input:focus {
+  border-color: var(--primary);
+}
+
+/* 备注输入 */
+.note-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 15px;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.note-input:focus {
+  border-color: var(--primary);
+}
+
+.note-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ===== 分类选择器 ===== */
+.category-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-select {
+  flex: 1;
+  padding: 10px 8px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.category-select:focus {
+  border-color: var(--primary);
+}
+
+.category-select.sub {
+  max-width: 160px;
+}
+
+.category-arrow {
+  color: var(--text-muted);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* ===== 提交按钮 ===== */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 8px;
+}
+
+.submit-btn:hover {
+  background: var(--primary-dark);
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+}
+
+.submit-btn:disabled {
+  background: var(--border);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* ===== 筛选栏 ===== */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-select {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  flex: 1;
+  min-width: 120px;
+}
+
+.filter-select:focus {
+  border-color: var(--primary);
+}
+
+.clear-filter-btn {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.clear-filter-btn:hover {
+  background: #fee2e2;
+  color: var(--danger);
+  border-color: #fecaca;
+}
+
+/* ===== 花销列表 ===== */
+.expense-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.expense-item {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  gap: 12px;
+  transition: box-shadow 0.2s;
+}
+
+.expense-item:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.expense-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.expense-category {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.expense-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.expense-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expense-right {
+  text-align: right;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.expense-amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--danger);
+}
+
+.expense-date {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.delete-btn {
+  border: none;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+}
+
+/* ===== 月度统计 ===== */
+.month-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.month-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: var(--text);
+}
+
+.month-btn:hover:not(:disabled) {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.month-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.month-label {
+  font-size: 16px;
+  font-weight: 700;
+  min-width: 100px;
+  text-align: center;
+}
+
+/* 总计卡片 */
+.total-card {
+  text-align: center;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: white;
+  padding: 24px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+}
+
+.total-label {
+  display: block;
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+.total-amount {
+  display: block;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+/* 分类排行图表 */
+.category-chart h3 {
+  font-size: 15px;
+  margin-bottom: 14px;
+  color: var(--text-secondary);
+}
+
+.chart-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.chart-category {
+  font-size: 13px;
+  width: 110px;
+  flex-shrink: 0;
+  text-align: right;
+  color: var(--text);
+}
+
+.chart-bar-wrapper {
+  flex: 1;
+  height: 24px;
+  background: #f3f4f6;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.chart-bar {
+  height: 100%;
+  border-radius: 12px;
+  min-width: 4px;
+  transition: width 0.5s ease;
+}
+
+.chart-amount {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  width: 80px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.chart-percent {
+  font-size: 12px;
+  color: var(--text-muted);
+  width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ===== 空状态 ===== */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.empty-hint {
+  font-size: 13px !important;
+  color: var(--text-muted);
+}
+
+/* ===== 加载中 ===== */
+.loading {
+  text-align: center;
+  padding: 32px;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+/* ===== 滚动条美化 ===== */
+.app-main::-webkit-scrollbar {
+  width: 5px;
+}
+
+.app-main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-main::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.app-main::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ===== 分类管理页 ===== */
+.category-manager {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.cat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.cat-header h2 {
+  margin-bottom: 0;
+}
+
+.cat-add-main-btn {
+  padding: 8px 16px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cat-add-main-btn:hover {
+  background: var(--primary-dark);
+}
+
+/* 分类列表 */
+.cat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cat-group {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.cat-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  gap: 8px;
+  transition: background 0.15s;
+}
+
+.cat-row.main-row {
+  border-bottom: 1px solid var(--border);
+}
+
+.cat-row.sub-row {
+  padding-left: 28px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.cat-row.sub-row:last-child {
+  border-bottom: none;
+}
+
+.cat-expand-btn {
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--text-muted);
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.cat-expand-btn:hover {
+  color: var(--primary);
+}
+
+.cat-name {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.cat-name.main-name {
+  font-weight: 600;
+}
+
+.cat-name.sub-name {
+  font-size: 13px;
+}
+
+.cat-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.cat-sub-indent {
+  color: var(--text-muted);
+  font-size: 12px;
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+}
+
+.cat-lock {
+  font-size: 13px;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.cat-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.cat-action-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.cat-action-btn.edit:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.cat-action-btn.delete:hover {
+  background: #fee2e2;
+  border-color: #fecaca;
+}
+
+.cat-action-btn.confirm {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  font-size: 16px;
+}
+
+.cat-action-btn.confirm:hover {
+  background: var(--primary-dark);
+}
+
+/* 编辑输入框 */
+.cat-edit-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+}
+
+.cat-edit-input.inline {
+  font-size: 13px;
+  padding: 4px 8px;
+}
+
+/* 添加小类按钮 */
+.cat-add-sub-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1px dashed var(--border);
+  background: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.cat-add-sub-btn:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: #fff7ed;
+}
+
+.add-sub-row {
+  background: #fff7ed;
+}
+
+/* 提示文字 */
+.cat-tip {
+  margin-top: 24px;
+  padding: 14px;
+  background: #fefce8;
+  border: 1px solid #fde68a;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: #92400e;
+  line-height: 1.8;
+}
+
+/* ===== 弹窗 ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.modal-content {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+  font-size: 17px;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.modal-content .form-group {
+  margin-bottom: 14px;
+}
+
+.modal-content .form-group label {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.modal-content .cat-edit-input {
+  width: 100%;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.modal-btn {
+  padding: 8px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.modal-btn.cancel {
+  background: var(--surface);
+  color: var(--text-secondary);
+}
+
+.modal-btn.cancel:hover {
+  background: #f3f4f6;
+}
+
+.modal-btn.confirm {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.modal-btn.confirm:hover {
+  background: var(--primary-dark);
+}
+
+/* ===== 收入/支出 类型切换 ===== */
+.type-toggle {
+  display: flex;
+  margin-bottom: 20px;
+  background: #f3f4f6;
+  border-radius: var(--radius);
+  padding: 3px;
+}
+
+.type-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: calc(var(--radius) - 2px);
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-muted);
+}
+
+.type-btn.expense.active {
+  background: #ef4444;
+  color: white;
+}
+
+.type-btn.income.active {
+  background: #22c55e;
+  color: white;
+}
+
+/* 提交按钮颜色变体 */
+.submit-btn.expense {
+  background: #ef4444;
+}
+
+.submit-btn.expense:hover {
+  background: #dc2626;
+}
+
+.submit-btn.income {
+  background: #22c55e;
+}
+
+.submit-btn.income:hover {
+  background: #16a34a;
+}
+
+/* 收入金额绿色 */
+.expense-amount.income {
+  color: #22c55e;
+}
+
+.currency-symbol.income {
+  color: #22c55e;
+}
+
+/* 收入记录行 */
+.expense-item.income-item {
+  border-left: 3px solid #22c55e;
+}
+
+/* ===== 月度统计总览卡片 ===== */
+.summary-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  text-align: center;
+  padding: 16px 10px;
+  border-radius: var(--radius);
+}
+
+.summary-card.income-card {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.summary-card.expense-card {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.summary-card.balance-card {
+  background: #f8f9fa;
+  border: 1px solid var(--border);
+}
+
+.summary-card.balance-card.positive {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.summary-card.balance-card.negative {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.summary-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.summary-amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.summary-amount.income {
+  color: #16a34a;
+}
+
+.summary-amount.expense {
+  color: #ef4444;
+}
+
+/* 柱状图变体 */
+.chart-bar.income-bar {
+  background: #22c55e;
+}
+
+.chart-bar.expense-bar {
+  background: #f97316;
+}
+
+.chart-amount.income {
+  color: #16a34a;
+}
+
+.chart-amount.expense {
+  color: #ef4444;
+}
+
+/* ===== 分类管理类型切换 ===== */
+.cat-type-tabs {
+  display: flex;
+  background: #f3f4f6;
+  border-radius: var(--radius-sm);
+  padding: 2px;
+}
+
+.cat-type-tab {
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: calc(var(--radius-sm) - 1px);
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-muted);
+}
+
+.cat-type-tab.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}

@@ -1,0 +1,53 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const j=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); const p=JSON.parse\\(j\\); console.log\\('version:', p.version\\);\")",
+      "Bash(./node_modules/electron/dist/electron.exe -e \"const m = require\\('module'\\); console.log\\('type:', process.type\\); try { const orig = m._resolveFilename; console.log\\('electron module resolves to:', orig\\('electron', module\\)\\); } catch\\(e\\) { console.log\\('error:', e.message\\); } setTimeout\\(\\(\\)=>process.exit\\(0\\), 1000\\)\")",
+      "WebSearch",
+      "WebFetch(domain:cn.electron-vite.org)",
+      "Bash(./node_modules/electron/dist/electron.exe -e \"console.log\\('electron/main:', require\\('electron/main'\\)\\); setTimeout\\(\\(\\)=>process.exit\\(0\\), 1000\\)\")",
+      "Bash(./node_modules/electron/dist/electron.exe --input-type=module -e \"import\\('electron'\\).then\\(m => { console.log\\('type:', typeof m\\); console.log\\('app:', typeof m.app\\); setTimeout\\(\\(\\)=>process.exit\\(0\\), 1000\\); }\\).catch\\(e => { console.log\\('error:', e.message\\); process.exit\\(1\\); }\\)\")",
+      "Bash(./node_modules/electron/dist/electron.exe -e ' *)",
+      "WebFetch(domain:github.com)",
+      "Bash(rm -rf electron src/main src/preload src/renderer tsconfig.node.json tsconfig.web.json electron.vite.config.ts global.d.ts _test.js _test_pkg.json _testapp)",
+      "Bash(cp src/renderer/src/styles/app.css src/styles/app.css)",
+      "Bash(npx vite *)",
+      "Bash(rustc --version)",
+      "Bash(cargo --version)",
+      "Bash(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o rustup-init.sh)",
+      "Bash(bash rustup-init.sh -y)",
+      "Bash(mkdir -p \"d:/heimajizhang\")",
+      "Bash(cp -r \"d:/Program Files/项目/记账桌面app/\"* \"d:/heimajizhang/\")",
+      "Bash(cp -r \"d:/Program Files/项目/记账桌面app/\".* \"d:/heimajizhang/\")",
+      "Read(//d//**)",
+      "Read(//d/heimajizhang/**)",
+      "Bash(python3 -c \"from PIL import Image; print\\('Pillow available'\\)\")",
+      "Bash(ls -la \"d:/heimajizhang/src-tauri/target/release/heimajizhang.exe\" 2>&1)",
+      "Read(//d/heimajizhang/src-tauri/target/release/**)",
+      "Read(//d/heimajizhang/src-tauri/**)",
+      "Bash(curl -L \"https://ghproxy.net/https://github.com/tauri-apps/binary-releases/releases/download/nsis-3.11/nsis-3.11.zip\" -o \"d:/heimajizhang/nsis-3.11.zip\" --connect-timeout 10 --max-time 60)",
+      "Bash(mkdir -p \"release/黑马记账\")",
+      "Bash(cp \"src-tauri/target/release/heimajizhang.exe\" \"release/黑马记账/黑马记账.exe\")",
+      "Bash(cp \"src-tauri/target/release/WebView2Loader.dll\" \"release/黑马记账/\")",
+      "Bash(du -sh \"release/黑马记账/\")",
+      "Bash(unzip -q nsis-3.11.zip -d nsis-3.11)",
+      "Bash(cd \"d:/heimajizhang\" && ls nsis-3.11/ 2>&1 && echo \"---\" && ls nsis-3.11/nsis-3.11/ 2>&1 | head -10)",
+      "Bash(git rm *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(start \"\" \"d:/heimajizhang/release/黑马记账/黑马记账.exe\")",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(ls -la \"$HOME/.ssh/\" 2>&1)",
+      "Read(//c/Users/Lenovo/.ssh/**)",
+      "Bash(ssh-keygen -t ed25519 -C heimajizhang@github -f 'C:\\\\Users\\\\Lenovo/.ssh/id_ed25519' -N '')",
+      "Bash(cat \"$HOME/.ssh/id_ed25519.pub\")",
+      "Bash(gh auth *)",
+      "Bash(git commit -m '初始化黑马记账项目 *)"
+    ],
+    "additionalDirectories": [
+      "d:\\heimajizhang",
+      "d:\\heimajizhang\\src-tauri"
+    ]
+  }
+}
