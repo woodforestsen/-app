@@ -1005,3 +1005,178 @@ h2 {
   color: var(--text);
   box-shadow: var(--shadow);
 }
+
+/* ===== 贪吃蛇游戏 ===== */
+.snake-game {
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.snake-scoreboard {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 12px;
+}
+
+.snake-score-item {
+  text-align: center;
+}
+
+.snake-score-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.snake-score-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.snake-score-value.high {
+  color: #f59e0b;
+}
+
+.snake-canvas-wrapper {
+  position: relative;
+  display: inline-block;
+  border: 2px solid #334155;
+  border-radius: 8px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.snake-canvas {
+  display: block;
+}
+
+/* 覆盖层（开始/暂停/结束） */
+.snake-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.snake-overlay-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.snake-overlay-hint {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.snake-overlay-score {
+  font-size: 18px;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.snake-overlay-new {
+  font-size: 16px;
+  color: #facc15;
+  margin: 0;
+  animation: pulse 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+/* 按钮 */
+.snake-btn {
+  padding: 10px 28px;
+  border: none;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.snake-btn.start,
+.snake-btn.restart {
+  background: #22c55e;
+  color: white;
+}
+
+.snake-btn.start:hover,
+.snake-btn.restart:hover {
+  background: #16a34a;
+}
+
+.snake-btn.pause {
+  background: #f59e0b;
+  color: white;
+}
+
+.snake-btn.pause:hover {
+  background: #d97706;
+}
+
+.snake-btn.resume {
+  background: #3b82f6;
+  color: white;
+}
+
+.snake-btn.resume:hover {
+  background: #2563eb;
+}
+
+.snake-controls {
+  margin-top: 12px;
+}
+
+/* 移动端方向键 */
+.snake-dpad {
+  display: none;
+  margin-top: 14px;
+}
+
+.snake-dpad .dpad-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.dpad-btn {
+  width: 48px;
+  height: 48px;
+  border: 2px solid #334155;
+  border-radius: 10px;
+  background: #1e293b;
+  color: #e2e8f0;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dpad-btn:active {
+  background: #334155;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .snake-dpad {
+    display: block;
+  }
+}

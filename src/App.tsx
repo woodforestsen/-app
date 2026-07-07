@@ -3,8 +3,9 @@ import AddExpense from './components/AddExpense'
 import ExpenseList from './components/ExpenseList'
 import MonthlyStats from './components/MonthlyStats'
 import CategoryManager from './components/CategoryManager'
+import SnakeGame from './components/SnakeGame'
 
-type Tab = 'add' | 'list' | 'stats' | 'categories'
+type Tab = 'add' | 'list' | 'stats' | 'categories' | 'snake'
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('add')
@@ -24,7 +25,8 @@ export default function App() {
     { key: 'add', label: '记账', icon: '✏️' },
     { key: 'list', label: '明细', icon: '📋' },
     { key: 'stats', label: '统计', icon: '📊' },
-    { key: 'categories', label: '分类', icon: '🏷️' }
+    { key: 'categories', label: '分类', icon: '🏷️' },
+    { key: 'snake', label: '贪吃蛇', icon: '🐍' }
   ]
 
   return (
@@ -53,6 +55,7 @@ export default function App() {
         {activeTab === 'categories' && (
           <CategoryManager key={refreshKey} onCategoriesChanged={handleCategoriesChanged} />
         )}
+        {activeTab === 'snake' && <SnakeGame />}
       </main>
     </div>
   )

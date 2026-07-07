@@ -43,7 +43,10 @@
       "Bash(ssh-keygen -t ed25519 -C heimajizhang@github -f 'C:\\\\Users\\\\Lenovo/.ssh/id_ed25519' -N '')",
       "Bash(cat \"$HOME/.ssh/id_ed25519.pub\")",
       "Bash(gh auth *)",
-      "Bash(git commit -m '初始化黑马记账项目 *)"
+      "Bash(git commit -m '初始化黑马记账项目 *)",
+      "Bash(git push *)",
+      "Bash(git checkout *)",
+      "Bash(git commit -m '存档点 3 — 添加贪吃蛇小游戏（Canvas版） *)"
     ],
     "additionalDirectories": [
       "d:\\heimajizhang",
