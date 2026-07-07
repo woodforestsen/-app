@@ -48,7 +48,10 @@
       "Bash(git checkout *)",
       "Bash(git commit -m '存档点 3 — 添加贪吃蛇小游戏（Canvas版） *)",
       "Read(//c/Users/Lenovo/.claude/**)",
-      "Bash(git commit -m '修复贪吃蛇代码审查发现的 8 个问题 *)"
+      "Bash(git commit -m '修复贪吃蛇代码审查发现的 8 个问题 *)",
+      "Bash(git merge *)",
+      "Bash(git stash *)",
+      "Bash(git commit -m '修复贪吃蛇两个遗漏bug *)"
     ],
     "additionalDirectories": [
       "d:\\heimajizhang",

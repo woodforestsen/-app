@@ -163,20 +163,26 @@ export default function SnakeGame() {
     const dir = dirRef.current
     const newHead: Point = { x: head.x + DIR[dir].x, y: head.y + DIR[dir].y }
 
+    // 撞墙
     if (newHead.x < 0 || newHead.x >= COLS || newHead.y < 0 || newHead.y >= ROWS) {
       endGame()
       return
     }
-    if (snake.some((p) => p.x === newHead.x && p.y === newHead.y)) {
+
+    // 先判断是否吃到食物
+    const ate = newHead.x === foodRef.current.x && newHead.y === foodRef.current.y
+    const newSnake = [newHead, ...snake]
+    if (!ate) {
+      newSnake.pop() // 没吃到就移除尾巴
+    }
+
+    // 碰撞检测：用移除尾巴后的蛇身（不含旧尾巴，因为它已移走）
+    if (newSnake.slice(1).some((p) => p.x === newHead.x && p.y === newHead.y)) {
       endGame()
       return
     }
 
-    const ate = newHead.x === foodRef.current.x && newHead.y === foodRef.current.y
-    const newSnake = [newHead, ...snake]
-    if (!ate) {
-      newSnake.pop()
-    } else {
+    if (ate) {
       const s = scoreRef.current + 10
       scoreRef.current = s
       setScore(s)
@@ -331,7 +337,7 @@ export default function SnakeGame() {
         </div>
         <div className="dpad-row">
           <button className="dpad-btn" onClick={pressLeft}>◀</button>
-          <button className="dpad-btn" onClick={togglePause}>
+          <button className="dpad-btn" onClick={gameState === 'gameover' ? startGame : togglePause}>
             {gameState === 'playing' ? '⏸' : '▶'}
           </button>
           <button className="dpad-btn" onClick={pressRight}>▶</button>
